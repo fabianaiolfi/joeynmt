@@ -42,7 +42,7 @@ class Model(nn.Module):
         :param src_vocab: source vocabulary
         :param trg_vocab: target vocabulary
         """
-        super(Model, self).__init__()
+        super(Model, self).__init__() # something with inheritance
 
         self.src_embed = src_embed
         self.trg_embed = trg_embed
@@ -50,14 +50,17 @@ class Model(nn.Module):
         self.decoder = decoder
         self.src_vocab = src_vocab
         self.trg_vocab = trg_vocab
-        self.bos_index = self.trg_vocab.stoi[BOS_TOKEN]
-        self.pad_index = self.trg_vocab.stoi[PAD_TOKEN]
+        self.bos_index = self.trg_vocab.stoi[BOS_TOKEN] # stoi – A dictionary of string to the index of the associated vector in the vectors input argument. https://pytorch.org/text/vocab.html
+        self.pad_index = self.trg_vocab.stoi[PAD_TOKEN] # The string token used as padding. Default: “<pad>”.
         self.eos_index = self.trg_vocab.stoi[EOS_TOKEN]
 
     # pylint: disable=arguments-differ
-    def forward(self, src: Tensor, trg_input: Tensor, src_mask: Tensor,
-                src_lengths: Tensor, trg_mask: Tensor = None) -> (
-        Tensor, Tensor, Tensor, Tensor):
+    def forward(self,
+                src: Tensor,
+                trg_input: Tensor,
+                src_mask: Tensor, # The src_mask is just a square matrix which is used to filter the attention weights. https://discuss.pytorch.org/t/nn-transformer-explaination/53175/4
+                src_lengths: Tensor,
+                trg_mask: Tensor = None) -> (Tensor, Tensor, Tensor, Tensor):
         """
         First encodes the source sentence.
         Then produces the target one word at a time.
@@ -75,12 +78,15 @@ class Model(nn.Module):
         unroll_steps = trg_input.size(1)
         return self.decode(encoder_output=encoder_output,
                            encoder_hidden=encoder_hidden,
-                           src_mask=src_mask, trg_input=trg_input,
+                           src_mask=src_mask,
+                           trg_input=trg_input,
                            unroll_steps=unroll_steps,
                            trg_mask=trg_mask)
 
-    def encode(self, src: Tensor, src_length: Tensor, src_mask: Tensor) \
-        -> (Tensor, Tensor):
+    def encode(self,
+                src: Tensor,
+                src_length: Tensor,
+                src_mask: Tensor) -> (Tensor, Tensor):
         """
         Encodes the source sentence.
 
@@ -91,11 +97,14 @@ class Model(nn.Module):
         """
         return self.encoder(self.src_embed(src), src_length, src_mask)
 
-    def decode(self, encoder_output: Tensor, encoder_hidden: Tensor,
-               src_mask: Tensor, trg_input: Tensor,
-               unroll_steps: int, decoder_hidden: Tensor = None,
-               trg_mask: Tensor = None) \
-        -> (Tensor, Tensor, Tensor, Tensor):
+    def decode(self,
+                encoder_output: Tensor,
+                encoder_hidden: Tensor,
+                src_mask: Tensor,
+                trg_input: Tensor,
+                unroll_steps: int,
+                decoder_hidden: Tensor = None,
+                trg_mask: Tensor = None) -> (Tensor, Tensor, Tensor, Tensor):
         """
         Decode, given an encoded source sentence.
 
@@ -116,8 +125,9 @@ class Model(nn.Module):
                             hidden=decoder_hidden,
                             trg_mask=trg_mask)
 
-    def get_loss_for_batch(self, batch: Batch, loss_function: nn.Module) \
-            -> Tensor:
+    def get_loss_for_batch(self,
+                            batch: Batch,
+                            loss_function: nn.Module) -> Tensor:
         """
         Compute non-normalized loss and number of tokens for a batch
 
@@ -128,8 +138,11 @@ class Model(nn.Module):
         """
         # pylint: disable=unused-variable
         out, hidden, att_probs, _ = self.forward(
-            src=batch.src, trg_input=batch.trg_input,
-            src_mask=batch.src_mask, src_lengths=batch.src_lengths,
+            src=batch.src,
+            # add attribute `factor` here
+            trg_input=batch.trg_input,
+            src_mask=batch.src_mask,
+            src_lengths=batch.src_lengths,
             trg_mask=batch.trg_mask)
 
         # compute log probs
@@ -140,8 +153,11 @@ class Model(nn.Module):
         # return batch loss = sum over all elements in batch that are not pad
         return batch_loss
 
-    def run_batch(self, batch: Batch, max_output_length: int, beam_size: int,
-                  beam_alpha: float) -> (np.array, np.array):
+    def run_batch(self,
+                    batch: Batch,
+                    max_output_length: int,
+                    beam_size: int,
+                    beam_alpha: float) -> (np.array, np.array):
         """
         Get outputs and attentions scores for a given batch
 
@@ -153,7 +169,8 @@ class Model(nn.Module):
             stacked_attention_scores: attention scores for batch
         """
         encoder_output, encoder_hidden = self.encode(
-            batch.src, batch.src_lengths,
+            batch.src,
+            batch.src_lengths,
             batch.src_mask)
 
         # if maximum output length is not globally specified, adapt to src len
@@ -199,6 +216,7 @@ class Model(nn.Module):
 
 def build_model(cfg: dict = None,
                 src_vocab: Vocabulary = None,
+                factor_vocab: Vocabulary = None, # assumed to have factors as extra optional argument, which is `None` if factors are not used
                 trg_vocab: Vocabulary = None) -> Model:
     """
     Build and initialize the model according to the configuration.
@@ -208,7 +226,7 @@ def build_model(cfg: dict = None,
     :param trg_vocab: target vocabulary
     :return: built and initialized model
     """
-    src_padding_idx = src_vocab.stoi[PAD_TOKEN]
+    src_padding_idx = src_vocab.stoi[PAD_TOKEN] # gets some index?
     trg_padding_idx = trg_vocab.stoi[PAD_TOKEN]
 
     src_embed = Embeddings(
