@@ -29,10 +29,10 @@ class Model(nn.Module):
                  encoder: Encoder,
                  decoder: Decoder,
                  src_embed: Embeddings,
-                 src_factors_embed: Embeddings,
+                 factor_embed: Embeddings,
                  trg_embed: Embeddings,
                  src_vocab: Vocabulary,
-                 src_factors_vocab: Vocabulary,
+                 factor_vocab: Vocabulary,
                  trg_vocab: Vocabulary) -> None:
         """
         Create a new encoder-decoder model
@@ -40,21 +40,21 @@ class Model(nn.Module):
         :param encoder: encoder
         :param decoder: decoder
         :param src_embed: source embedding
-        :param src_factors_embed: source factors embedding
+        :param factor_embed: source factor embedding
         :param trg_embed: target embedding
         :param src_vocab: source vocabulary
-        :param src_factors_vocab: source factors vocabulary
+        :param factor_vocab: source factor vocabulary
         :param trg_vocab: target vocabulary
         """
         super(Model, self).__init__() # something with inheritance
 
         self.src_embed = src_embed
-        self.src_factors_embed = src_factors_embed
+        self.factor_embed = factor_embed
         self.trg_embed = trg_embed
         self.encoder = encoder
         self.decoder = decoder
         self.src_vocab = src_vocab
-        self.src_factors_vocab = src_factors_vocab
+        self.factor_vocab = factor_vocab
         self.trg_vocab = trg_vocab
         self.bos_index = self.trg_vocab.stoi[BOS_TOKEN] # stoi – A dictionary of string to the index of the associated vector in the vectors input argument. https://pytorch.org/text/vocab.html
         self.pad_index = self.trg_vocab.stoi[PAD_TOKEN] # The string token used as padding. Default: “<pad>”.
@@ -63,6 +63,7 @@ class Model(nn.Module):
     # pylint: disable=arguments-differ
     def forward(self,
                 src: Tensor,
+                factor: Tensor,
                 trg_input: Tensor,
                 src_mask: Tensor, # src_mask is just a square matrix which is used to filter the attention weights. https://discuss.pytorch.org/t/nn-transformer-explaination/53175/4
                 src_lengths: Tensor,
@@ -79,7 +80,7 @@ class Model(nn.Module):
         :return: decoder outputs
         """
         encoder_output, encoder_hidden = self.encode(src=src,
-                                                     src_factor=src_factor,
+                                                     factor=factor,
                                                      src_length=src_lengths,
                                                      src_mask=src_mask)
         unroll_steps = trg_input.size(1)
@@ -92,14 +93,14 @@ class Model(nn.Module):
 
     def encode(self,
                 src: Tensor,
-                src_factor: Tensor,
+                factor: Tensor,
                 src_length: Tensor,
                 src_mask: Tensor) -> (Tensor, Tensor):
         """
         Encodes the source sentence.
 
         :param src:
-        :param src_factor:
+        :param factor:
         :param src_length:
         :param src_mask:
         :return: encoder outputs (output, hidden_concat)
@@ -148,7 +149,7 @@ class Model(nn.Module):
         # pylint: disable=unused-variable
         out, hidden, att_probs, _ = self.forward(
             src=batch.src,
-            src_factor=batch.src_factor,
+            factor=batch.factor,
             trg_input=batch.trg_input,
             src_mask=batch.src_mask,
             src_lengths=batch.src_lengths,
@@ -179,7 +180,7 @@ class Model(nn.Module):
         """
         encoder_output, encoder_hidden = self.encode(
             batch.src,
-            batch.src_factor,
+            batch.factor,
             batch.src_lengths,
             batch.src_mask)
 
@@ -223,38 +224,38 @@ class Model(nn.Module):
                "\ttrg_embed=%s)" % (self.__class__.__name__, self.encoder,
                    self.decoder, self.src_embed, self.trg_embed)
 
-
+#model = build_model(cfg["model"], src_vocab=src_vocab, trg_vocab=trg_vocab, factor_vocab=factor_vocab)
 def build_model(cfg: dict = None,
                 src_vocab: Vocabulary = None,
-                src_factors_vocab: Vocabulary = None, # assumed to have factors as extra optional argument, which is `None` if factors are not used
-                trg_vocab: Vocabulary = None) -> Model:
+                trg_vocab: Vocabulary = None,
+                factor_vocab: Vocabulary = None) -> Model: # assumed to have factor as extra optional argument, which is `None` if factor are not used
     """
     Build and initialize the model according to the configuration.
 
     :param cfg: dictionary configuration containing model specifications
     :param src_vocab: source vocabulary
-    :param src_factors_vocab: source factor vocabulary
+    :param factor_vocab: source factor vocabulary
     :param trg_vocab: target vocabulary
     :return: built and initialized model
     """
     src_padding_idx = src_vocab.stoi[PAD_TOKEN] # gets some index?
     trg_padding_idx = trg_vocab.stoi[PAD_TOKEN]
-    factors_padding_idx = src_factors_vocab.stoi[PAD_TOKEN] # see `initialize_model` further below
+    factor_padding_idx = factor_vocab.stoi[PAD_TOKEN] # see `initialize_model` further below
 
     src_embed = Embeddings(
         **cfg["encoder"]["embeddings"], vocab_size=len(src_vocab),
         padding_idx=src_padding_idx)
 
-    src_factors_embed = Embeddings( # ADD STUFF HERE TO CREATE FACTOR EMBEDDINGS?
-        **cfg["encoder"]["factor_embeddings"], vocab_size=len(src_factors_vocab),
-        padding_idx=factors_padding_idx)
+    factor_embed = Embeddings( # ADD STUFF HERE TO CREATE FACTOR EMBEDDINGS?
+        **cfg["encoder"]["factor_embeddings"], vocab_size=len(factor_vocab),
+        padding_idx=factor_padding_idx)
 
-    # do something here with src_factor; adding and concatenating
+    # do something here with factor; adding and concatenating
     # probably have to adjust first return arguemnt self.src_embed(src), e.g. create embedding in function and add/concatenate here
-    # also include if else clause from cfg file, if factors are used or not (factors = True ?)
+    # also include if else clause from cfg file, if factor are used or not (factor = True ?)
 
-    # if factor_combine: "add" then add factors to src
-    # elif factor_combine: "concatenate" than concatenate factors to src
+    # if factor_combine: "add" then add factor to src
+    # elif factor_combine: "concatenate" than concatenate factor to src
     # else do nothing
 
 
@@ -301,8 +302,8 @@ def build_model(cfg: dict = None,
             emb_size=trg_embed.embedding_dim, emb_dropout=dec_emb_dropout)
 
     model = Model(encoder=encoder, decoder=decoder,
-                  src_embed=src_embed, trg_embed=trg_embed,
-                  src_vocab=src_vocab, trg_vocab=trg_vocab)
+                  src_embed=src_embed, factor_embed=factor_embed, trg_embed=trg_embed,
+                  src_vocab=src_vocab, factor_vocab=factor_vocab, trg_vocab=trg_vocab)
 
     # tie softmax layer with trg embeddings
     if cfg.get("tied_softmax", False):
@@ -317,6 +318,6 @@ def build_model(cfg: dict = None,
                 "The decoder must be a Transformer.")
 
     # custom initialization of model parameters
-    initialize_model(model, cfg, src_padding_idx, trg_padding_idx, factors_padding_idx) # see initialization.py, line 60
+    initialize_model(model, cfg, src_padding_idx, trg_padding_idx, factor_padding_idx) # see initialization.py, line 60
 
     return model
