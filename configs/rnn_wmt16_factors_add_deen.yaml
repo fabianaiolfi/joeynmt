@@ -58,8 +58,8 @@ model:
         factor_embeddings:
             embedding_dim: 16
             scale: False
-        factor_combine: "concatenate"
-        #factor_combine: "add"
+        #factor_combine: "concatenate"
+        factor_combine: "add"
         embeddings:
             embedding_dim: 16
             scale: False

@@ -305,6 +305,10 @@ def build_model(cfg: dict = None,
             **cfg["decoder"], encoder=encoder, vocab_size=len(trg_vocab),
             emb_size=trg_embed.embedding_dim, emb_dropout=dec_emb_dropout)
 
+    # check that the dimensions for embeddings and encoder inputs are compatible
+    if src_embed.embedding_dim != factor_embed.embedding_dim:
+        raise ConfigurationError("Dimensions are not compatible.")
+
     model = Model(encoder=encoder, decoder=decoder,
                   src_embed=src_embed, factor_embed=factor_embed, trg_embed=trg_embed,
                   src_vocab=src_vocab, factor_vocab=factor_vocab, trg_vocab=trg_vocab,
