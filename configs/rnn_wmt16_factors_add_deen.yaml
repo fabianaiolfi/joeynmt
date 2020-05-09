@@ -58,7 +58,7 @@ model:
         factor_embeddings:
             embedding_dim: 16
             scale: False
-        factor_combine: "concatenate" # or: "add"
+        factor_combine: "add" # or: "concatenate"
         embeddings:
             embedding_dim: 16
             scale: False

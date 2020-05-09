@@ -34,7 +34,8 @@ class Model(nn.Module):
                  trg_embed: Embeddings,
                  src_vocab: Vocabulary,
                  factor_vocab: Vocabulary,
-                 trg_vocab: Vocabulary) -> None:
+                 trg_vocab: Vocabulary,
+                 factor_combine: str) -> None:
         """
         Create a new encoder-decoder model
 
@@ -57,6 +58,7 @@ class Model(nn.Module):
         self.src_vocab = src_vocab
         self.factor_vocab = factor_vocab
         self.trg_vocab = trg_vocab
+        self.factor_combine = factor_combine
         self.bos_index = self.trg_vocab.stoi[BOS_TOKEN] # stoi – A dictionary of string to the index of the associated vector in the vectors input argument. https://pytorch.org/text/vocab.html
         self.pad_index = self.trg_vocab.stoi[PAD_TOKEN] # The string token used as padding. Default: “<pad>”.
         self.eos_index = self.trg_vocab.stoi[EOS_TOKEN]
@@ -106,6 +108,24 @@ class Model(nn.Module):
         :param src_mask:
         :return: encoder outputs (output, hidden_concat)
         """
+        #print(src_embed.Embedding)
+        # do something here with factor; adding and concatenating
+        # probably have to adjust first return arguemnt self.src_embed(src), e.g. create embedding in function and add/concatenate here
+        # also include if else clause from cfg file, if factor are used or not (factor = True ?)
+
+        #if cfg.get("factor_combine", "add"):
+            #src_embed = src_embed.add(factor_embed) # https://www.aiworkbox.com/lessons/add-two-pytorch-tensors-together
+            #src_embed = torch.add(src_embed, factor_embed) # https://jhui.github.io/2018/02/09/PyTorch-Basic-operations/
+        if self.factor_combine == "add":
+            src = torch.add(src, factor) # this seems to work
+        #src = torch.cat(src, factor) # https://pytorch.org/docs/stable/torch.html#torch.cat
+        #else:
+        #    pass
+        # if factor_combine: "add" then add factor to src
+        # elif factor_combine: "concatenate" than concatenate factor to src
+        # else do nothing
+
+
         return self.encoder(self.src_embed(src), src_length, src_mask)
 
     def decode(self,
@@ -251,22 +271,7 @@ def build_model(cfg: dict = None,
         **cfg["encoder"]["factor_embeddings"], vocab_size=len(factor_vocab),
         padding_idx=factor_padding_idx)
 
-    #print(src_embed.Embedding)
-    # do something here with factor; adding and concatenating
-    # probably have to adjust first return arguemnt self.src_embed(src), e.g. create embedding in function and add/concatenate here
-    # also include if else clause from cfg file, if factor are used or not (factor = True ?)
-
-    #if cfg.get("factor_combine", "add"):
-        #src_embed = src_embed.add(factor_embed) # https://www.aiworkbox.com/lessons/add-two-pytorch-tensors-together
-        #src_embed = torch.add(src_embed, factor_embed) # https://jhui.github.io/2018/02/09/PyTorch-Basic-operations/
-    if cfg.get("factor_combine", "concatenate"):
-        temp_ = torch.cat(src_vocab, factor_vocab) # https://pytorch.org/docs/stable/torch.html#torch.cat
-    else:
-        pass
-    # if factor_combine: "add" then add factor to src
-    # elif factor_combine: "concatenate" than concatenate factor to src
-    # else do nothing
-
+    factor_combine = cfg["encoder"].get("factor_combine")
 
     # this ties source and target embeddings
     # for softmax layer tying, see further below
@@ -312,7 +317,8 @@ def build_model(cfg: dict = None,
 
     model = Model(encoder=encoder, decoder=decoder,
                   src_embed=src_embed, factor_embed=factor_embed, trg_embed=trg_embed,
-                  src_vocab=src_vocab, factor_vocab=factor_vocab, trg_vocab=trg_vocab)
+                  src_vocab=src_vocab, factor_vocab=factor_vocab, trg_vocab=trg_vocab,
+                  factor_combine=factor_combine)
 
     # tie softmax layer with trg embeddings
     if cfg.get("tied_softmax", False):

@@ -1,90 +1,86 @@
-2020-05-08 22:32:25,242 Hello! This is Joey-NMT.
-2020-05-08 22:32:27,320 Total params: 24172992
-2020-05-08 22:32:27,321 Trainable parameters: ['decoder.att_vector_layer.bias', 'decoder.att_vector_layer.weight', 'decoder.attention.energy_layer.weight', 'decoder.attention.key_layer.weight', 'decoder.attention.query_layer.weight', 'decoder.bridge_layer.bias', 'decoder.bridge_layer.weight', 'decoder.output_layer.weight', 'decoder.rnn.bias_hh_l0', 'decoder.rnn.bias_ih_l0', 'decoder.rnn.weight_hh_l0', 'decoder.rnn.weight_ih_l0', 'encoder.rnn.bias_hh_l0', 'encoder.rnn.bias_hh_l0_reverse', 'encoder.rnn.bias_ih_l0', 'encoder.rnn.bias_ih_l0_reverse', 'encoder.rnn.weight_hh_l0', 'encoder.rnn.weight_hh_l0_reverse', 'encoder.rnn.weight_ih_l0', 'encoder.rnn.weight_ih_l0_reverse', 'factor_embed.lut.weight', 'src_embed.lut.weight']
-2020-05-08 22:32:27,322 cfg.name                           : rnn_wmt16_factors_add_deen
-2020-05-08 22:32:27,322 cfg.data.src                       : de
-2020-05-08 22:32:27,322 cfg.data.trg                       : en
-2020-05-08 22:32:27,323 cfg.data.train                     : data/train.bpe
-2020-05-08 22:32:27,323 cfg.data.dev                       : data/dev.bpe
-2020-05-08 22:32:27,323 cfg.data.test                      : data/test.bpe
-2020-05-08 22:32:27,323 cfg.data.level                     : bpe
-2020-05-08 22:32:27,323 cfg.data.lowercase                 : False
-2020-05-08 22:32:27,323 cfg.data.max_sent_length           : 100
-2020-05-08 22:32:27,324 cfg.data.src_vocab                 : shared_models/vocab.txt
-2020-05-08 22:32:27,324 cfg.data.trg_vocab                 : shared_models/vocab.txt
-2020-05-08 22:32:27,324 cfg.data.factor_vocab              : shared_models/vocab.factor
-2020-05-08 22:32:27,324 cfg.data.factor_voc_limit          : 10000
-2020-05-08 22:32:27,324 cfg.data.factor_voc_min_freq       : 1
-2020-05-08 22:32:27,325 cfg.data.use_factor                : True
-2020-05-08 22:32:27,325 cfg.testing.beam_size              : 5
-2020-05-08 22:32:27,325 cfg.testing.alpha                  : 1.0
-2020-05-08 22:32:27,325 cfg.training.optimizer             : adam
-2020-05-08 22:32:27,325 cfg.training.normalization         : tokens
-2020-05-08 22:32:27,325 cfg.training.learning_rate         : 0.0003
-2020-05-08 22:32:27,326 cfg.training.batch_size            : 2048
-2020-05-08 22:32:27,326 cfg.training.batch_type            : token
-2020-05-08 22:32:27,326 cfg.training.eval_batch_size       : 1024
-2020-05-08 22:32:27,326 cfg.training.eval_batch_type       : token
-2020-05-08 22:32:27,326 cfg.training.scheduling            : plateau
-2020-05-08 22:32:27,326 cfg.training.patience              : 8
-2020-05-08 22:32:27,327 cfg.training.weight_decay          : 0.0
-2020-05-08 22:32:27,327 cfg.training.decrease_factor       : 0.7
-2020-05-08 22:32:27,327 cfg.training.early_stopping_metric : ppl
-2020-05-08 22:32:27,327 cfg.training.epochs                : 2
-2020-05-08 22:32:27,327 cfg.training.validation_freq       : 500
-2020-05-08 22:32:27,327 cfg.training.logging_freq          : 100
-2020-05-08 22:32:27,328 cfg.training.eval_metric           : bleu
-2020-05-08 22:32:27,328 cfg.training.model_dir             : models/rnn_wmt16_factors_add_deen
-2020-05-08 22:32:27,328 cfg.training.overwrite             : True
-2020-05-08 22:32:27,328 cfg.training.shuffle               : True
-2020-05-08 22:32:27,328 cfg.training.use_cuda              : False
-2020-05-08 22:32:27,328 cfg.training.max_output_length     : 100
-2020-05-08 22:32:27,329 cfg.training.print_valid_sents     : [0, 1, 2, 3, 4]
-2020-05-08 22:32:27,329 cfg.training.label_smoothing       : 0.1
-2020-05-08 22:32:27,329 cfg.model.tied_embeddings          : True
-2020-05-08 22:32:27,329 cfg.model.tied_softmax             : False
-2020-05-08 22:32:27,329 cfg.model.encoder.rnn_type         : gru
-2020-05-08 22:32:27,330 cfg.model.encoder.factor_embeddings.embedding_dim : 16
-2020-05-08 22:32:27,330 cfg.model.encoder.factor_embeddings.scale : False
-2020-05-08 22:32:27,330 cfg.model.encoder.factor_combine   : add
-2020-05-08 22:32:27,330 cfg.model.encoder.embeddings.embedding_dim : 16
-2020-05-08 22:32:27,330 cfg.model.encoder.embeddings.scale : False
-2020-05-08 22:32:27,331 cfg.model.encoder.hidden_size      : 1024
-2020-05-08 22:32:27,331 cfg.model.encoder.bidirectional    : True
-2020-05-08 22:32:27,331 cfg.model.encoder.dropout          : 0.0
-2020-05-08 22:32:27,331 cfg.model.encoder.num_layers       : 1
-2020-05-08 22:32:27,332 cfg.model.decoder.rnn_type         : gru
-2020-05-08 22:32:27,332 cfg.model.decoder.embeddings.embedding_dim : 16
-2020-05-08 22:32:27,332 cfg.model.decoder.embeddings.scale : False
-2020-05-08 22:32:27,332 cfg.model.decoder.emb_scale        : False
-2020-05-08 22:32:27,332 cfg.model.decoder.hidden_size      : 1024
-2020-05-08 22:32:27,333 cfg.model.decoder.dropout          : 0.0
-2020-05-08 22:32:27,333 cfg.model.decoder.hidden_dropout   : 0.0
-2020-05-08 22:32:27,333 cfg.model.decoder.num_layers       : 1
-2020-05-08 22:32:27,333 cfg.model.decoder.input_feeding    : True
-2020-05-08 22:32:27,333 cfg.model.decoder.init_hidden      : bridge
-2020-05-08 22:32:27,333 cfg.model.decoder.attention        : bahdanau
-2020-05-08 22:32:27,333 Data set sizes: 
+2020-05-09 13:37:05,286 Hello! This is Joey-NMT.
+2020-05-09 13:37:08,521 Total params: 24172992
+2020-05-09 13:37:08,521 Trainable parameters: ['decoder.att_vector_layer.bias', 'decoder.att_vector_layer.weight', 'decoder.attention.energy_layer.weight', 'decoder.attention.key_layer.weight', 'decoder.attention.query_layer.weight', 'decoder.bridge_layer.bias', 'decoder.bridge_layer.weight', 'decoder.output_layer.weight', 'decoder.rnn.bias_hh_l0', 'decoder.rnn.bias_ih_l0', 'decoder.rnn.weight_hh_l0', 'decoder.rnn.weight_ih_l0', 'encoder.rnn.bias_hh_l0', 'encoder.rnn.bias_hh_l0_reverse', 'encoder.rnn.bias_ih_l0', 'encoder.rnn.bias_ih_l0_reverse', 'encoder.rnn.weight_hh_l0', 'encoder.rnn.weight_hh_l0_reverse', 'encoder.rnn.weight_ih_l0', 'encoder.rnn.weight_ih_l0_reverse', 'factor_embed.lut.weight', 'src_embed.lut.weight']
+2020-05-09 13:37:08,523 cfg.name                           : rnn_wmt16_factors_add_deen
+2020-05-09 13:37:08,523 cfg.data.src                       : de
+2020-05-09 13:37:08,523 cfg.data.trg                       : en
+2020-05-09 13:37:08,524 cfg.data.train                     : data/train.bpe
+2020-05-09 13:37:08,524 cfg.data.dev                       : data/dev.bpe
+2020-05-09 13:37:08,524 cfg.data.test                      : data/test.bpe
+2020-05-09 13:37:08,524 cfg.data.level                     : bpe
+2020-05-09 13:37:08,524 cfg.data.lowercase                 : False
+2020-05-09 13:37:08,524 cfg.data.max_sent_length           : 100
+2020-05-09 13:37:08,525 cfg.data.src_vocab                 : shared_models/vocab.txt
+2020-05-09 13:37:08,525 cfg.data.trg_vocab                 : shared_models/vocab.txt
+2020-05-09 13:37:08,525 cfg.data.factor_vocab              : shared_models/vocab.factor
+2020-05-09 13:37:08,525 cfg.data.factor_voc_limit          : 10000
+2020-05-09 13:37:08,525 cfg.data.factor_voc_min_freq       : 1
+2020-05-09 13:37:08,525 cfg.data.use_factor                : True
+2020-05-09 13:37:08,526 cfg.testing.beam_size              : 5
+2020-05-09 13:37:08,526 cfg.testing.alpha                  : 1.0
+2020-05-09 13:37:08,526 cfg.training.optimizer             : adam
+2020-05-09 13:37:08,526 cfg.training.normalization         : tokens
+2020-05-09 13:37:08,526 cfg.training.learning_rate         : 0.0003
+2020-05-09 13:37:08,527 cfg.training.batch_size            : 2048
+2020-05-09 13:37:08,527 cfg.training.batch_type            : token
+2020-05-09 13:37:08,527 cfg.training.eval_batch_size       : 1024
+2020-05-09 13:37:08,527 cfg.training.eval_batch_type       : token
+2020-05-09 13:37:08,528 cfg.training.scheduling            : plateau
+2020-05-09 13:37:08,528 cfg.training.patience              : 8
+2020-05-09 13:37:08,528 cfg.training.weight_decay          : 0.0
+2020-05-09 13:37:08,528 cfg.training.decrease_factor       : 0.7
+2020-05-09 13:37:08,528 cfg.training.early_stopping_metric : ppl
+2020-05-09 13:37:08,528 cfg.training.epochs                : 2
+2020-05-09 13:37:08,529 cfg.training.validation_freq       : 500
+2020-05-09 13:37:08,529 cfg.training.logging_freq          : 100
+2020-05-09 13:37:08,529 cfg.training.eval_metric           : bleu
+2020-05-09 13:37:08,529 cfg.training.model_dir             : models/rnn_wmt16_factors_add_deen
+2020-05-09 13:37:08,529 cfg.training.overwrite             : True
+2020-05-09 13:37:08,530 cfg.training.shuffle               : True
+2020-05-09 13:37:08,530 cfg.training.use_cuda              : False
+2020-05-09 13:37:08,530 cfg.training.max_output_length     : 100
+2020-05-09 13:37:08,530 cfg.training.print_valid_sents     : [0, 1, 2, 3, 4]
+2020-05-09 13:37:08,530 cfg.training.label_smoothing       : 0.1
+2020-05-09 13:37:08,531 cfg.model.tied_embeddings          : True
+2020-05-09 13:37:08,531 cfg.model.tied_softmax             : False
+2020-05-09 13:37:08,531 cfg.model.encoder.rnn_type         : gru
+2020-05-09 13:37:08,531 cfg.model.encoder.factor_embeddings.embedding_dim : 16
+2020-05-09 13:37:08,532 cfg.model.encoder.factor_embeddings.scale : False
+2020-05-09 13:37:08,532 cfg.model.encoder.factor_combine   : add
+2020-05-09 13:37:08,532 cfg.model.encoder.embeddings.embedding_dim : 16
+2020-05-09 13:37:08,532 cfg.model.encoder.embeddings.scale : False
+2020-05-09 13:37:08,533 cfg.model.encoder.hidden_size      : 1024
+2020-05-09 13:37:08,533 cfg.model.encoder.bidirectional    : True
+2020-05-09 13:37:08,533 cfg.model.encoder.dropout          : 0.0
+2020-05-09 13:37:08,533 cfg.model.encoder.num_layers       : 1
+2020-05-09 13:37:08,533 cfg.model.decoder.rnn_type         : gru
+2020-05-09 13:37:08,533 cfg.model.decoder.embeddings.embedding_dim : 16
+2020-05-09 13:37:08,534 cfg.model.decoder.embeddings.scale : False
+2020-05-09 13:37:08,534 cfg.model.decoder.emb_scale        : False
+2020-05-09 13:37:08,534 cfg.model.decoder.hidden_size      : 1024
+2020-05-09 13:37:08,534 cfg.model.decoder.dropout          : 0.0
+2020-05-09 13:37:08,534 cfg.model.decoder.hidden_dropout   : 0.0
+2020-05-09 13:37:08,534 cfg.model.decoder.num_layers       : 1
+2020-05-09 13:37:08,534 cfg.model.decoder.input_feeding    : True
+2020-05-09 13:37:08,535 cfg.model.decoder.init_hidden      : bridge
+2020-05-09 13:37:08,535 cfg.model.decoder.attention        : bahdanau
+2020-05-09 13:37:08,535 Data set sizes: 
 	train 93597,
 	valid 2169,
 	test 2999
-2020-05-08 22:32:27,334 First training example:
+2020-05-09 13:37:08,535 First training example:
 	[SRC] in ge@@ wi@@ ss@@ em S@@ in@@ ne bed@@ au@@ ere ich das .
 	[SRC_FACTOR] APPR ADJA ADJA ADJA ADJA NN NN NN VVFIN VVFIN VVFIN PPER PDS $.
 	[TRG] this is a p@@ ity , in a sen@@ se .
-2020-05-08 22:32:27,334 First 10 words (src): (0) <unk> (1) <pad> (2) <s> (3) </s> (4) , (5) . (6) the (7) in (8) die (9) der
-2020-05-08 22:32:27,334 First 10 words (src_factor): (0) <unk> (1) <pad> (2) <s> (3) </s> (4) NN (5) ADJA (6) NE (7) ART (8) VVFIN (9) APPR
-2020-05-08 22:32:27,334 First 10 words (trg): (0) <unk> (1) <pad> (2) <s> (3) </s> (4) , (5) . (6) the (7) in (8) die (9) der
-2020-05-08 22:32:27,334 Number of Src words (types): 2915
-2020-05-08 22:32:27,334 Number of Src_factor words (types): 57
-2020-05-08 22:32:27,335 Number of Trg words (types): 2915
-2020-05-08 22:32:27,335 Model(
+2020-05-09 13:37:08,535 First 10 words (src): (0) <unk> (1) <pad> (2) <s> (3) </s> (4) , (5) . (6) the (7) in (8) die (9) der
+2020-05-09 13:37:08,536 First 10 words (src_factor): (0) <unk> (1) <pad> (2) <s> (3) </s> (4) NN (5) ADJA (6) NE (7) ART (8) VVFIN (9) APPR
+2020-05-09 13:37:08,536 First 10 words (trg): (0) <unk> (1) <pad> (2) <s> (3) </s> (4) , (5) . (6) the (7) in (8) die (9) der
+2020-05-09 13:37:08,536 Number of Src words (types): 2915
+2020-05-09 13:37:08,536 Number of Src_factor words (types): 57
+2020-05-09 13:37:08,536 Number of Trg words (types): 2915
+2020-05-09 13:37:08,536 Model(
 	encoder=RecurrentEncoder(GRU(16, 1024, batch_first=True, bidirectional=True)),
 	decoder=RecurrentDecoder(rnn=GRU(1040, 1024, batch_first=True), attention=BahdanauAttention),
 	src_embed=Embeddings(embedding_dim=16, vocab_size=2915),
 	trg_embed=Embeddings(embedding_dim=16, vocab_size=2915))
-2020-05-08 22:32:27,340 EPOCH 1
-2020-05-08 22:51:02,443 Epoch   1 Step:      100 Batch Loss:     5.604191 Tokens per Sec:      107, Lr: 0.000300
-2020-05-08 23:09:34,228 Epoch   1 Step:      200 Batch Loss:     5.632022 Tokens per Sec:      110, Lr: 0.000300
-2020-05-08 23:28:26,524 Epoch   1 Step:      300 Batch Loss:     5.576992 Tokens per Sec:      109, Lr: 0.000300
-2020-05-08 23:46:42,646 Epoch   1 Step:      400 Batch Loss:     5.582868 Tokens per Sec:      109, Lr: 0.000300
+2020-05-09 13:37:08,541 EPOCH 1
