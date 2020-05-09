@@ -56,12 +56,12 @@ model:
         rnn_type: "gru"
         # changes for factors:
         factor_embeddings:
-            embedding_dim: 16
+            embedding_dim: 1024
             scale: False
         #factor_combine: "concatenate"
         factor_combine: "add"
         embeddings:
-            embedding_dim: 16
+            embedding_dim: 1024
             scale: False
         hidden_size: 1024
         bidirectional: True
@@ -70,7 +70,7 @@ model:
     decoder:
         rnn_type: "gru"
         embeddings:
-            embedding_dim: 16
+            embedding_dim: 1024
             scale: False
         emb_scale: False
         hidden_size: 1024
