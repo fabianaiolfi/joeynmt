@@ -108,7 +108,7 @@ class Model(nn.Module):
         :param src_mask:
         :return: encoder outputs (output, hidden_concat)
         """
-
+        # Add or concatenate tensors
         if self.factor_combine == "add":
             src = torch.add(src, factor) # https://pytorch.org/docs/stable/torch.html?highlight=add#torch.add
         elif self.factor_combine == "concatenate":
@@ -249,7 +249,7 @@ def build_model(cfg: dict = None,
     :param trg_vocab: target vocabulary
     :return: built and initialized model
     """
-    src_padding_idx = src_vocab.stoi[PAD_TOKEN] # gets some index?
+    src_padding_idx = src_vocab.stoi[PAD_TOKEN]
     trg_padding_idx = trg_vocab.stoi[PAD_TOKEN]
     factor_padding_idx = factor_vocab.stoi[PAD_TOKEN] # see `initialize_model` further below
 
@@ -257,7 +257,7 @@ def build_model(cfg: dict = None,
         **cfg["encoder"]["embeddings"], vocab_size=len(src_vocab),
         padding_idx=src_padding_idx)
 
-    factor_embed = Embeddings( # ADD STUFF HERE TO CREATE FACTOR EMBEDDINGS?
+    factor_embed = Embeddings(
         **cfg["encoder"]["factor_embeddings"], vocab_size=len(factor_vocab),
         padding_idx=factor_padding_idx)
 
