@@ -5,6 +5,7 @@ Module to represents whole models
 
 import numpy as np
 
+import torch
 import torch.nn as nn
 from torch import Tensor
 import torch.nn.functional as F
@@ -250,10 +251,18 @@ def build_model(cfg: dict = None,
         **cfg["encoder"]["factor_embeddings"], vocab_size=len(factor_vocab),
         padding_idx=factor_padding_idx)
 
+    #print(src_embed.Embedding)
     # do something here with factor; adding and concatenating
     # probably have to adjust first return arguemnt self.src_embed(src), e.g. create embedding in function and add/concatenate here
     # also include if else clause from cfg file, if factor are used or not (factor = True ?)
 
+    #if cfg.get("factor_combine", "add"):
+        #src_embed = src_embed.add(factor_embed) # https://www.aiworkbox.com/lessons/add-two-pytorch-tensors-together
+        #src_embed = torch.add(src_embed, factor_embed) # https://jhui.github.io/2018/02/09/PyTorch-Basic-operations/
+    if cfg.get("factor_combine", "concatenate"):
+        temp_ = torch.cat(src_vocab, factor_vocab) # https://pytorch.org/docs/stable/torch.html#torch.cat
+    else:
+        pass
     # if factor_combine: "add" then add factor to src
     # elif factor_combine: "concatenate" than concatenate factor to src
     # else do nothing
