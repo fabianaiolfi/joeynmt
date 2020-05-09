@@ -108,23 +108,13 @@ class Model(nn.Module):
         :param src_mask:
         :return: encoder outputs (output, hidden_concat)
         """
-        #print(src_embed.Embedding)
-        # do something here with factor; adding and concatenating
-        # probably have to adjust first return arguemnt self.src_embed(src), e.g. create embedding in function and add/concatenate here
-        # also include if else clause from cfg file, if factor are used or not (factor = True ?)
 
-        #if cfg.get("factor_combine", "add"):
-            #src_embed = src_embed.add(factor_embed) # https://www.aiworkbox.com/lessons/add-two-pytorch-tensors-together
-            #src_embed = torch.add(src_embed, factor_embed) # https://jhui.github.io/2018/02/09/PyTorch-Basic-operations/
         if self.factor_combine == "add":
-            src = torch.add(src, factor) # this seems to work
-        #src = torch.cat(src, factor) # https://pytorch.org/docs/stable/torch.html#torch.cat
-        #else:
-        #    pass
-        # if factor_combine: "add" then add factor to src
-        # elif factor_combine: "concatenate" than concatenate factor to src
-        # else do nothing
-
+            src = torch.add(src, factor) # https://pytorch.org/docs/stable/torch.html?highlight=add#torch.add
+        elif self.factor_combine == "concatenate":
+            src = torch.cat((src, factor), 1) # https://pytorch.org/docs/stable/torch.html#torch.cat
+        else:
+            pass
 
         return self.encoder(self.src_embed(src), src_length, src_mask)
 
