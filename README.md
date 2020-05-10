@@ -242,7 +242,7 @@ Joeys are [infant marsupials](https://en.wikipedia.org/wiki/Marsupial#Early_deve
 
 ## Setting Up
 ```
-# HTTPs Clone
+# HTTPs clone
 git clone https://github.com/fabianaiolfi/joeynmt-toy-models.git
 
 # Change branch
@@ -268,13 +268,13 @@ After having trained the model, I transferred all files to my local machine to c
 # Fork
 https://github.com/bricksdont/joeynmt
 
-# HTTPs Clone
+# HTTPs clone
 git clone https://github.com/fabianaiolfi/joeynmt.git
 
-# Change Branch
+# Change branch
 git checkout factors_incomplete
 
-# Create New Branch
+# Create new branch
 git checkout -b factors
 ```
 
