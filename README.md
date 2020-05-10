@@ -236,6 +236,8 @@ url = {https://arxiv.org/abs/1907.12484}
 ## Naming
 Joeys are [infant marsupials](https://en.wikipedia.org/wiki/Marsupial#Early_development).
 
+***
+
 # MT Exercise 4: Documentation
 
 ## Setting Up
@@ -293,4 +295,4 @@ This is a good point to take a step back and look at what has gone wrong.
 ## Problems and Take Aways
 Being slightly overwhelmed by the sheer mass of code in this exercise, I spent too much time trying to understand what the code was doing without realising that I hadn’t understood the underlying architecture and vector math. If I were to start this exercise from scratch, I would go over neural network basics again before diving into the code.
 
-Working with GCP was tough. Perhaps it’s my lack of experience with remote servers and limited knowledge of basic bash commands. But the IMHO rather extensive first setup, files seemingly vanishing and reappearing and the somewhat arbitrary error of lacking resources in my zone preventing instances from starting made the entire experience less delightful.
+Working with GCP was tough. Perhaps it’s my lack of experience with remote servers and limited knowledge of basic bash commands. But the IMHO rather extensive first setup, files seemingly vanishing and reappearing and instances constantly not starting because of lacking resources in my zone made the entire experience less delightful.
