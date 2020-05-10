@@ -3,17 +3,17 @@
 [![Gitter](https://badges.gitter.im/joeynmt/community.svg)](https://gitter.im/joeynmt/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ## Goal and Purpose
-Joey NMT framework is developed for educational purposes. 
-It aims to be a **clean** and **minimalistic** code base to help novices 
+Joey NMT framework is developed for educational purposes.
+It aims to be a **clean** and **minimalistic** code base to help novices
 find fast answers to the following questions.
 - How to implement classic NMT architectures (RNN and Transformer) in PyTorch?
 - What are the building blocks of these architectures and how do they interact?
 - How to modify these blocks (e.g. deeper, wider, ...)?
 - How to modify the training procedure (e.g. add a regularizer)?
 
-In contrast to other NMT frameworks, we will **not** aim for the most recent 
+In contrast to other NMT frameworks, we will **not** aim for the most recent
 features or speed through engineering or training tricks
-since this often goes in hand with an increase in code complexity 
+since this often goes in hand with an increase in code complexity
 and a decrease in readability.
 
 However, Joey NMT re-implements baselines from major publications.
@@ -64,7 +64,7 @@ For details, follow the tutorial in [the docs](https://joeynmt.readthedocs.io).
 ### Data Preparation
 
 #### Parallel Data
-For training a translation model, you need parallel data, i.e. a collection of source sentences and reference translations that are aligned sentence-by-sentence and stored in two files, 
+For training a translation model, you need parallel data, i.e. a collection of source sentences and reference translations that are aligned sentence-by-sentence and stored in two files,
 such that each line in the reference file is the translation of the same line in the source file.
 
 #### Pre-processing
@@ -79,18 +79,18 @@ Currently, JoeyNMT supports the byte-pair-encodings (BPE) format by [subword-nmt
 Experiments are specified in configuration files, in simple [YAML](http://yaml.org/) format. You can find examples in the `configs` directory.
 `small.yaml` contains a detailed explanation of configuration options.
 
-Most importantly, the configuration contains the description of the model architecture (e.g. number of hidden units in the encoder RNN), 
+Most importantly, the configuration contains the description of the model architecture (e.g. number of hidden units in the encoder RNN),
 paths to the training, development and test data, and the training hyperparameters (learning rate, validation frequency etc.).
 
 ### Training
 
 #### Start
-For training, run 
+For training, run
 
-`python3 -m joeynmt train configs/small.yaml`. 
+`python3 -m joeynmt train configs/small.yaml`.
 
-This will train a model on the training data specified in the config (here: `small.yaml`), 
-validate on validation data, 
+This will train a model on the training data specified in the config (here: `small.yaml`),
+validate on validation data,
 and store model parameters, vocabularies, validation outputs and a small number of attention plots in the `model_dir` (also specified in config).
 
 Note that pre-processing like tokenization or BPE-ing is not included in training, but has to be done manually before.
@@ -98,14 +98,14 @@ Note that pre-processing like tokenization or BPE-ing is not included in trainin
 Tip: Be careful not to overwrite models, set `overwrite: False` in the model configuration.
 
 #### Validations
-The `validations.txt` file in the model directory reports the validation results at every validation point. 
+The `validations.txt` file in the model directory reports the validation results at every validation point.
 Models are saved whenever a new best validation score is reached, in `batch_no.ckpt`, where `batch_no` is the number of batches the model has been trained on so far.
 `best.ckpt` links to the checkpoint that has so far achieved the best validation score.
 
 
 #### Visualization
 JoeyNMT uses Tensorboard to visualize training and validation curves and attention matrices during training.
-Launch [Tensorboard](https://github.com/tensorflow/tensorboard) with `tensorboard --logdir model_dir/tensorboard` (or `python -m tensorboard.main ...`) and then open the url (default: `localhost:6006`) with a browser. 
+Launch [Tensorboard](https://github.com/tensorflow/tensorboard) with `tensorboard --logdir model_dir/tensorboard` (or `python -m tensorboard.main ...`) and then open the url (default: `localhost:6006`) with a browser.
 
 For a stand-alone plot, run `python3 scripts/plot_validation.py model_dir --plot_values bleu PPL --output_path my_plot.pdf` to plot curves of validation BLEU and PPL.
 
@@ -119,8 +119,8 @@ There are three options for testing what the model has learned.
 
 Whatever data you feed the model for translating, make sure it is properly pre-processed, just as you pre-processed the training data, e.g. tokenized and split into subwords (if working with BPEs).
 
-#### 1. Test Set Evaluation 
-For testing and evaluating on your parallel test/dev set, run 
+#### 1. Test Set Evaluation
+For testing and evaluating on your parallel test/dev set, run
 
 `python3 -m joeynmt test configs/small.yaml --output_path out`.
 
@@ -201,14 +201,14 @@ Code extending the functionalities beyond the basics will most likely not end up
 ## Projects and Extensions
 Here we'll collect projects and repositories that are based on Joey, so you can find inspiration and examples on how to modify and extend the code.
 
-- **Joey Toy Models**. [@bricksdont](https://github.com/bricksdont) built a [collection of scripts] (https://github.com/bricksdont/joeynmt-toy-models) showing how to install JoeyNMT, preprocess data, train and evaluate models. This is a great starting point for anyone who wants to run systematic experiments, tends to forget python calls, or doesn't like to run notebook cells! 
+- **Joey Toy Models**. [@bricksdont](https://github.com/bricksdont) built a [collection of scripts] (https://github.com/bricksdont/joeynmt-toy-models) showing how to install JoeyNMT, preprocess data, train and evaluate models. This is a great starting point for anyone who wants to run systematic experiments, tends to forget python calls, or doesn't like to run notebook cells!
 - **African NMT**. [@jaderabbit](https://github.com/jaderabbit) started an initiative at the Indaba Deep Learning School 2019 to ["put African NMT on the map"](https://twitter.com/alienelf/status/1168159616167010305). The goal is to build and collect NMT models for low-resource African languages. The [Masakhane repository](https://github.com/jaderabbit/masakhane) contains and explains all the code you need to train JoeyNMT and points to data sources. It also contains benchmark models and configurations that members of Masakhane have built for various African languages.
 - **Slack Joey**. [Code](https://github.com/juliakreutzer/slack-joey) to locally deploy a Joey NMT model as chat bot in a Slack workspace. It's a convenient way to probe your model without having to implement an API. And bad translations for chat messages can be very entertaining, too ;)
-- **Flask Joey**. [@kevindegila](https://github.com/kevindegila) built a [flask interface to Joey](https://github.com/kevindegila/flask-joey), so you can deploy your trained model in a web app and query it in the browser. 
+- **Flask Joey**. [@kevindegila](https://github.com/kevindegila) built a [flask interface to Joey](https://github.com/kevindegila/flask-joey), so you can deploy your trained model in a web app and query it in the browser.
 - **User Study**. We evaluated the code quality of this repository by testing the understanding of novices through quiz questions. Find the details in Section 3 of the [Joey NMT paper](https://arxiv.org/abs/1907.12484).
 - **Self-Regulated Interactive Seq2Seq Learning**. Julia Kreutzer and Stefan Riezler. Published at ACL 2019. [Paper](https://arxiv.org/abs/1907.05190) and [Code](https://github.com/juliakreutzer/joeynmt/tree/acl19). This project augments the standard fully-supervised learning regime by weak and self-supervision for a better trade-off of quality and supervision costs in interactive NMT.
 - **Speech Joey**. [@Sariyusha](https://github.com/Sariyusha) is giving Joey ears for speech translation. [Code](https://github.com/Sariyusha/speech_joey).
-- **Hieroglyph Translation**. Joey NMT was used to translate hieroglyphs in [this IWSLT 2019 paper](https://www.cl.uni-heidelberg.de/statnlpgroup/publications/IWSLT2019.pdf) by Philipp Wiesenbach and Stefan Riezler. They gave Joey NMT multi-tasking abilities. 
+- **Hieroglyph Translation**. Joey NMT was used to translate hieroglyphs in [this IWSLT 2019 paper](https://www.cl.uni-heidelberg.de/statnlpgroup/publications/IWSLT2019.pdf) by Philipp Wiesenbach and Stefan Riezler. They gave Joey NMT multi-tasking abilities.
 
 If you used Joey NMT for a project, publication or built some code on top of it, let us know and we'll link it here.
 
@@ -234,5 +234,63 @@ url = {https://arxiv.org/abs/1907.12484}
 ```
 
 ## Naming
-Joeys are [infant marsupials](https://en.wikipedia.org/wiki/Marsupial#Early_development). 
+Joeys are [infant marsupials](https://en.wikipedia.org/wiki/Marsupial#Early_development).
 
+# MT Exercise 4: Documentation
+
+## Setting Up
+```
+# HTTPs Clone
+git clone https://github.com/fabianaiolfi/joeynmt-toy-models.git
+
+# Change branch
+git checkout ex4
+
+# Run scripts
+./scripts/make_virtualenv.sh
+source venvs/torch3/bin/activate
+./scripts/download_install_packages.sh
+./scripts/download_preprocessed_data.sh
+```
+
+## Training Baseline Model
+```
+./scripts/train.sh
+```
+I made some minor adjustments (e.g. setting `use_cuda` to `True`) to be able to train the baseline model on a GCP VM instance. Using one NVIDIA Tesla K80 using 8 vCPUs with 32GB of memory took around 90 minutes to complete two epochs.
+
+After having trained the model, I transferred all files to my local machine to continue work there. Running `./scripts/evaluate.sh` returned a BLEU score of 8.9.
+
+## Implementing Factored Translation
+```
+# Fork
+https://github.com/bricksdont/joeynmt
+
+# HTTPs Clone
+git clone https://github.com/fabianaiolfi/joeynmt.git
+
+# Change Branch
+git checkout factors_incomplete
+
+# Create New Branch
+git checkout -b factors
+```
+
+Attempts to make the necessary changes to build a model with source factors can be found in [`model.py`](https://github.com/fabianaiolfi/joeynmt/blob/factors/joeynmt/model.py).
+
+To see if everything would run, I copied `rnn_wmt16_factors_add_deen.yaml` and `rnn_wmt16_factors_concatenate_deen.yaml` from the baseline model repo. I also created soft links for the `data` and `shared_models` directories.
+
+I made changes to `model.py` until the two commands `python3 -m joeynmt train configs/rnn_wmt16_factors_add_deen.yaml` and `python3 -m joeynmt train configs/rnn_wmt16_factors_concatenate_deen.yaml` ran without errors on my local machine.
+
+In a final step, I exchanged the soft links with their original directories and uploaded the `factors` branch of `joeynmt` to my GCP VM instance. Running `python3 -m joeynmt train configs/rnn_wmt16_factors_add_deen.yaml` produced the following error message:
+
+```
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xc3 in position 312: ordinal not in range(128)
+```
+
+This is a good point to take a step back and look at what has gone wrong.
+
+## Problems and Take Aways
+Being slightly overwhelmed by the sheer mass of code in this exercise, I spent too much time trying to understand what the code was doing without realising that I hadn’t understood the underlying architecture and vector math. If I were to start this exercise from scratch, I would go over neural network basics again before diving into the code.
+
+Working with GCP was tough. Perhaps it’s my lack of experience with remote servers and limited knowledge of basic bash commands. But the IMHO rather extensive first setup, files seemingly vanishing and reappearing and the somewhat arbitrary error of lacking resources in my zone preventing instances from starting made the entire experience less delightful.
