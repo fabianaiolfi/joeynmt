@@ -291,6 +291,7 @@ UnicodeDecodeError: 'ascii' codec can't decode byte 0xc3 in position 312: ordina
 ```
 
 This is a good point to take a step back and look at what has gone wrong.
+_Side note: The OLAT forum does provide a solution for the `UnicodeDecodeError` which I tried to fix but after restarting the VM instance, I received the `NVIDIA driver on your system is too old` error._
 
 ## Problems and Take Aways
 Being slightly overwhelmed by the sheer mass of code in this exercise, I spent too much time trying to understand what the code was doing without realising that I hadn’t understood the underlying architecture and vector math. If I were to start this exercise from scratch, I would go over neural network basics again before diving into the code.
